@@ -10,6 +10,7 @@
     switch ($_SERVER["REQUEST_METHOD"]){
        case "PUT":
        parse_str(file_get_contents("http://papi.capture.tenam.re/parametre"),$post_vars);
+       var_dump($post_vars);
             if (isset($post_vars['superieur_a']) && isset($post_vars['inferieur_a'])) {
 
                 $parametreDAO = new ParametreDAO();
