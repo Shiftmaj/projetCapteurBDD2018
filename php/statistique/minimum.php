@@ -1,4 +1,7 @@
 <?php
+
+if($_SERVER["REQUEST_METHOD"]==='GET'){
+
     include "../accesseur/StatistiqueDAO.php";
 
     $statistiqueDAO = new StatistiqueDAO();
@@ -10,10 +13,11 @@
 
     foreach($listeStats as $stats)
     {
-?>
-    <temperature>
-        <minimum><?=$stats->minimum?></minimum>
-    </temperature>
-<?php
+    ?>
+        <temperature>
+            <minimum><?=$stats->minimum?></minimum>
+        </temperature>
+    <?php
     }
+}
 ?>
