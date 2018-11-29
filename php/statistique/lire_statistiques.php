@@ -1,5 +1,8 @@
 <?php
 
+if($_SERVER["REQUEST_METHOD"]==='POST'){
+    die();
+} 
 if($_SERVER["REQUEST_METHOD"]==='GET'){
 
     include "../accesseur/StatistiqueDAO.php";
