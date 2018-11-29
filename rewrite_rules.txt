@@ -1,0 +1,4 @@
+rewrite ^/temperature/(\w+)$ /php/statistique/$1.php last;
+rewrite ^/temperature/?$ /php/statistique/lire_statistiques.php last;
+rewrite ^/parametre/?$ /php/parametre/parametre.php last;
+rewrite ^.*$ =404 last;
