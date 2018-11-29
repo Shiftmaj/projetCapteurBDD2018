@@ -7,10 +7,10 @@
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
     
-    switch ($_SERVER["REQUEST_METHOD"]){
+    switch ($_SERVER['REQUEST_METHOD']){
        case "PUT":
-       parse_str(file_get_contents("php://input"),$post_vars);
-       var_dump(file_get_contents("php://input"));
+       parse_str(file_get_contents('php://input'),$post_vars);
+       var_dump(file_get_contents('php://input'));
        var_dump($post_vars);
             if (isset($post_vars['superieur_a']) && isset($post_vars['inferieur_a'])) {
 
