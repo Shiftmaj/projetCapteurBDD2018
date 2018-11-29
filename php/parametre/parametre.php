@@ -6,12 +6,13 @@
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    
+
+    $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
+    $input = json_decode(file_get_contents('php://input'));
+    var_dump($input);
+
     switch ($_SERVER['REQUEST_METHOD']){
        case "PUT":
-       $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
-       $input = json_decode(file_get_contents('php://input'));
-       var_dump($input);
             if (isset($input->superieur_a) && isset($input->inferieur_a)) {
 
                 $parametreDAO = new ParametreDAO();
