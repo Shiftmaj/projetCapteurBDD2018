@@ -9,20 +9,21 @@
     
     switch ($_SERVER["REQUEST_METHOD"]){
        case "PUT":
-            if (isset($_POST['superieur_a']) && isset($_POST['inferieur_a'])) {
+       parse_str(file_get_contents("php://input"),$post_vars);
+            if (isset($post_vars['superieur_a']) && isset($post_vars['inferieur_a'])) {
 
                 $parametreDAO = new ParametreDAO();
                 $parametres = new stdClass();
-                $parametres->superieurA = $_POST['superieur_a'];
-                $parametres->inferieurA = $_POST['inferieur_a'];
+                $parametres->superieurA = $post_vars['superieur_a'];
+                $parametres->inferieurA = $post_vars['inferieur_a'];
 
-                if (isset($_POST['quantite_entree'])) {
-                    $parametres->quantiteEntree = $_POST['quantite_entree'];
+                if (isset($post_vars['quantite_entree'])) {
+                    $parametres->quantiteEntree = $post_vars['quantite_entree'];
                     $parametres->heures = 0;
 
                 }
-                else if (isset($_POST['heures'])) {
-                    $parametres->heures = $_POST['heures'];
+                else if (isset($post_vars['heures'])) {
+                    $parametres->heures = $post_vars['heures'];
                     $parametres->quantiteEntree = 0;
 
                 }
@@ -39,7 +40,6 @@
             echo "SUCCES";
             break;
        case "GET":
-       default:
           $listeParametres = $parametreDAO->listerParametres();
 
           header('Content-Type: application/xml');
