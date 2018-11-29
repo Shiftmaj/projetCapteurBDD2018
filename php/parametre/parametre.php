@@ -9,9 +9,9 @@
     
     switch ($_SERVER['REQUEST_METHOD']){
        case "PUT":
-       parse_str(file_get_contents('php://input'),$post_vars);
-       var_dump(file_get_contents('php://input'));
-       var_dump($post_vars);
+       $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
+       $input = json_decode(file_get_contents('php://input'),true);
+       var_dump($input);
             if (isset($post_vars['superieur_a']) && isset($post_vars['inferieur_a'])) {
 
                 $parametreDAO = new ParametreDAO();
