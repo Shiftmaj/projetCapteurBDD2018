@@ -9,8 +9,7 @@
 
     $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
     $input = json_decode(file_get_contents('php://input'));
-    var_dump($input);
-
+    
     switch ($_SERVER['REQUEST_METHOD']){
        case "PUT":
             if (isset($input->superieur_a) && isset($input->inferieur_a)) {
