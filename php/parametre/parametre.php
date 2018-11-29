@@ -10,22 +10,22 @@
     switch ($_SERVER['REQUEST_METHOD']){
        case "PUT":
        $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
-       $input = json_decode(file_get_contents('php://input'),true);
+       $input = json_decode(file_get_contents('php://input'));
        var_dump($input);
-            if (isset($post_vars['superieur_a']) && isset($post_vars['inferieur_a'])) {
+            if (isset($input->superieur_a) && isset($input->inferieur_a)) {
 
                 $parametreDAO = new ParametreDAO();
                 $parametres = new stdClass();
-                $parametres->superieurA = $post_vars['superieur_a'];
-                $parametres->inferieurA = $post_vars['inferieur_a'];
+                $parametres->superieurA = $input->superieur_a;
+                $parametres->inferieurA = $input->inferieur_a;
 
-                if (isset($post_vars['quantite_entree'])) {
-                    $parametres->quantiteEntree = $post_vars['quantite_entree'];
+                if (isset($input->quantite_entree)) {
+                    $parametres->quantiteEntree = $input->quantite_entree;
                     $parametres->heures = 0;
 
                 }
-                else if (isset($post_vars['heures'])) {
-                    $parametres->heures = $post_vars['heures'];
+                else if (isset($input->heures)) {
+                    $parametres->heures = $input->heures;
                     $parametres->quantiteEntree = 0;
 
                 }
