@@ -40,6 +40,7 @@
             echo "SUCCES";
             break;
        case "GET":
+          $parametreDAO = new ParametreDAO();
           $listeParametres = $parametreDAO->listerParametres();
 
           header('Content-Type: application/xml');
