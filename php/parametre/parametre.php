@@ -64,5 +64,7 @@
           <?php
           
           break;
+       default:
+          die();   
     }
 ?>

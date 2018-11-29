@@ -17,8 +17,10 @@ if($_SERVER["REQUEST_METHOD"]==='GET'){
         <temperature>
             <mediane><?=$stats->mediane?></mediane>
         </temperature>
-
     <?php
     }
+}
+else{
+    die();
 }
 ?>

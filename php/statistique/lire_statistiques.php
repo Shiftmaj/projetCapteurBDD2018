@@ -31,4 +31,7 @@ if($_SERVER["REQUEST_METHOD"]==='GET'){
 
 <?php
 }
+else{
+	die();
+}
 ?>
