@@ -23,7 +23,6 @@ class ParametreDAO
         $requete->bindParam(":superieur_a", $parametres->superieurA);
         $requete->bindParam(":inferieur_a", $parametres->inferieurA);
         $requete->execute();
-        $requete->fetchAll(PDO::FETCH_OBJ);
     }
 }
 

@@ -11,7 +11,7 @@
     $input = json_decode(file_get_contents('php://input'));
     
     switch ($_SERVER['REQUEST_METHOD']){
-       case "PUT":
+        case "PUT":
             if (isset($input->superieur_a) && isset($input->inferieur_a)) {
 
                 $parametreDAO = new ParametreDAO();
@@ -41,18 +41,19 @@
             $parametreDAO->modifierParametres($parametres);
             echo "SUCCES";
             break;
-       case "GET":
-          $parametreDAO = new ParametreDAO();
-          $listeParametres = $parametreDAO->listerParametres();
 
-          header('Content-Type: application/xml');
-          echo '<?xml version="1.0" encoding="UTF-8"?>';
-          ?>
-          <parametres>
-          <?php
-            foreach($listeParametres as $parametre)
-            {
+        case "GET":
+            $parametreDAO = new ParametreDAO();
+            $listeParametres = $parametreDAO->listerParametres();
+
+            header('Content-Type: application/xml');
+            echo '<?xml version="1.0" encoding="UTF-8"?>';
             ?>
+            <parametres>
+            <?php
+                foreach($listeParametres as $parametre)
+                {
+                ?>
                 <parametre>
                     <heures><?=$parametre->heures?></heures>
                     <quantite_entree><?=$parametre->quantite_entree?></quantite_entree>
@@ -61,12 +62,13 @@
                 </parametre>
             <?php
             }
-          ?>
-          </parametres>
-          <?php
-          
-          break;
-       default:
-          die();   
+            ?>
+            </parametres>
+            <?php
+            break;
+
+        default:
+            echo "CONNEXION FERMEE";
+            die();   
     }
 ?>
