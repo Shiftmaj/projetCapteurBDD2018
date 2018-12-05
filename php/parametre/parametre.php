@@ -11,20 +11,20 @@
     $input = json_decode(file_get_contents('php://input'));
     
     switch ($_SERVER['REQUEST_METHOD']){
-        case "PUT":
-            if (isset($input->superieur_a) && isset($input->inferieur_a)) {
+       case "PUT":
+            if (isset($input->superieur_a) && isset($input->inferieur_a) && is_float($input->superieur_a) && is_float($input->inferieur_a)) {
 
                 $parametreDAO = new ParametreDAO();
                 $parametres = new stdClass();
                 $parametres->superieurA = $input->superieur_a;
                 $parametres->inferieurA = $input->inferieur_a;
 
-                if (isset($input->quantite_entree)) {
+                if (isset($input->quantite_entree) && is_int($input->quantite_entree)) {
                     $parametres->quantiteEntree = $input->quantite_entree;
                     $parametres->heures = 0;
 
                 }
-                else if (isset($input->heures)) {
+                else if (isset($input->heures) && is_int($input->heures)) {
                     $parametres->heures = $input->heures;
                     $parametres->quantiteEntree = 0;
 
