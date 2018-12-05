@@ -6,6 +6,7 @@ BEGIN
     THEN
         INSERT INTO public.brute_archivage(id, temperature, timestamp)
         SELECT id, temperature, timestamp FROM public.brute;
+        DELETE FROM brute;
     END IF;
 END;
 $BODY$ LANGUAGE plpgsql;
