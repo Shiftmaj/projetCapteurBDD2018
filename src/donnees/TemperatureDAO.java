@@ -30,9 +30,9 @@ public class TemperatureDAO {
 
     public Temperature rechercherTemperature() {
         try {
-            URL urlListeVaisseau = new URL("http://54.39.144.87/apiCapture/statistique/lire_statistiques.php");
+            URL urlListeTemperature = new URL("https://papi.capture.tenam.re/temperature");
             String derniereBalise = "</statistiques>";
-            InputStream flux = urlListeVaisseau.openConnection().getInputStream();
+            InputStream flux = urlListeTemperature.openConnection().getInputStream();
             Scanner lecteur = new Scanner(flux);
             lecteur.useDelimiter(derniereBalise);
             xml = lecteur.next() + derniereBalise;

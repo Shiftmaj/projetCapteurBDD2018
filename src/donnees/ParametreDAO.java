@@ -2,165 +2,77 @@ package donnees;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.StringBufferInputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.StringJoiner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import controleur.ControleurPrincipal;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import model.Parametre;
+import model.Temperature;
 
-public class ParametreDAO {
+public class TemperatureDAO {
+    List<Temperature> listeTemperature;
+    String xml = null;
 
-	String xml = null;
-	ControleurPrincipal controleurPrincipal = ControleurPrincipal.getInstance();
+    public TemperatureDAO() {
+        listeTemperature = new ArrayList<>();
+    }
 
-	public ParametreDAO() {
+    public Temperature rechercherTemperature() {
+        try {
+            URL urlListeTemperature = new URL("https://papi.capture.tenam.re/temperature");
+            String derniereBalise = "</statistiques>";
+            InputStream flux = urlListeTemperature.openConnection().getInputStream();
+            Scanner lecteur = new Scanner(flux);
+            lecteur.useDelimiter(derniereBalise);
+            xml = lecteur.next() + derniereBalise;
 
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
 
-	public void modifierParametre(int heure, int element, double superieurA, double inferieurA, boolean boolHeure){
+        }
+        try {
+            DocumentBuilder parseur = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            @SuppressWarnings("deprecation")
+            Document document = parseur.parse(new StringBufferInputStream(xml));
+            String racine = document.getDocumentElement().getNodeName();
 
-		if(inferieurA>superieurA){
-			System.out.println("CONDITION ON");
-			if(boolHeure){
-				if(heure > 0){
-					try {
-						URL url = new URL("http://54.39.144.87/apiCapture/parametre/modifier.php");
-						URLConnection con = url.openConnection();
-						HttpURLConnection http = (HttpURLConnection)con;
-						http.setRequestMethod("POST");
-						http.setDoOutput(true);
+            NodeList listeNoeudsTemperature = document.getElementsByTagName("statistique");
+            for (int position = 0; position < listeNoeudsTemperature.getLength(); position++) {
+                Temperature temperature = new Temperature();
+                Element noeudTemperature = (Element) listeNoeudsTemperature.item(position);
+                String minimum = noeudTemperature.getElementsByTagName("minimum").item(0).getTextContent();
+                temperature.setMinimum((minimum != "") ? Float.parseFloat(minimum) : 999999);
+                String maximum = noeudTemperature.getElementsByTagName("maximum").item(0).getTextContent();
+                temperature.setMaximum((maximum != "") ? Float.parseFloat(maximum) : 999999);
+                String moyenne = noeudTemperature.getElementsByTagName("moyenne").item(0).getTextContent();
+                temperature.setMoyenne((moyenne != "") ? Float.parseFloat(moyenne) : 999999);
+                String mode = noeudTemperature.getElementsByTagName("mode").item(0).getTextContent();
+                temperature.setMode((mode != "") ? Float.parseFloat(mode) : 999999);
+                String mediane = noeudTemperature.getElementsByTagName("mediane").item(0).getTextContent();
+                temperature.setMediane((mediane != "") ? Float.parseFloat(mediane) : 999999);
+                return temperature;
+            }
 
-						Map<String,String> arguments = new HashMap<>();
-						arguments.put("heures", "" + heure);
-						arguments.put("superieur_a", "" + superieurA);
-						arguments.put("inferieur_a", "" + inferieurA);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-						StringJoiner sj = new StringJoiner("&");
-						for(Map.Entry<String,String> entree: arguments.entrySet())
-							sj.add(URLEncoder.encode(entree.getKey(),"UTF-8") + "="
-									+ URLEncoder.encode(entree.getValue(), "UTF-8"));
-						byte[] sortie = sj.toString().getBytes(StandardCharsets.UTF_8);
-						int longueur = sortie.length;
-
-						http.setFixedLengthStreamingMode(longueur);
-						http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-						http.connect();
-						try(OutputStream flux = http.getOutputStream()){
-							flux.write(sortie);
-						}
-
-					}catch (Exception e){
-						e.printStackTrace();
-						System.out.println("NON");
-					}
-				}
-			}
-			else {
-				if(element > 2){
-					try {
-						URL url = new URL("http://54.39.144.87/apiCapture/parametre/modifier.php");
-						URLConnection con = url.openConnection();
-						HttpURLConnection http = (HttpURLConnection)con;
-						http.setRequestMethod("POST");
-						http.setDoOutput(true);
-
-						Map<String,String> arguments = new HashMap<>();
-						arguments.put("quantite_entree", "" + element);
-						arguments.put("superieur_a", "" + superieurA);
-						arguments.put("inferieur_a", "" + inferieurA);
-
-						StringJoiner sj = new StringJoiner("&");
-						for(Map.Entry<String,String> entree: arguments.entrySet())
-							sj.add(URLEncoder.encode(entree.getKey(),"UTF-8") + "="
-									+ URLEncoder.encode(entree.getValue(), "UTF-8"));
-						byte[] sortie = sj.toString().getBytes(StandardCharsets.UTF_8);
-						int longueur = sortie.length;
-
-						http.setFixedLengthStreamingMode(longueur);
-						http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-						http.connect();
-						try(OutputStream flux = http.getOutputStream()){
-							flux.write(sortie);
-						}
-					}catch (Exception e){
-						e.printStackTrace();
-						System.out.println("NON");
-					}
-				}
-			}
-		}
-	}
-
-	public Parametre rechercherParametre(){
-		try
-		{
-
-			URL urlListeParam = new URL("http://54.39.144.87/apiCapture/parametre/lire_parametre.php");
-			String derniereBalise = "</parametres>";
-			InputStream flux = urlListeParam.openConnection().getInputStream();
-			Scanner lecteur = new Scanner(flux);
-			lecteur.useDelimiter(derniereBalise);
-			xml = lecteur.next() + derniereBalise;
-
-		} catch(IOException e) {
-			e.printStackTrace();
-
-		}
-		try
-		{
-			DocumentBuilder parseur =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			@SuppressWarnings("deprecation")
-			Document document = parseur.parse(new StringBufferInputStream(xml));
-			String racine = document.getDocumentElement().getNodeName();
-			System.out.println(racine);
-
-			NodeList listeNoeudsParametre = document.getElementsByTagName("parametres");
-			for(int position = 0; position < listeNoeudsParametre.getLength(); position++)
-			{
-				Parametre parametre = new Parametre();
-				Element noeudParametres = (Element)listeNoeudsParametre.item(position);
-				String nbHeure = noeudParametres.getElementsByTagName("heures").item(0).getTextContent();
-				parametre.setNbHeure(Integer.valueOf(nbHeure));
-				String nbElement = noeudParametres.getElementsByTagName("quantite_entree").item(0).getTextContent();
-				parametre.setNbElement(Integer.valueOf(nbElement));
-				String superieur_a = noeudParametres.getElementsByTagName("superieur_a").item(0).getTextContent();
-				parametre.setSuperieurA(Float.valueOf(superieur_a));
-				String inferieur_a = noeudParametres.getElementsByTagName("inferieur_a").item(0).getTextContent();
-				parametre.setInferieurA(Float.valueOf(inferieur_a));
-
-
-				return parametre;
-			}
-
-	}catch (ParserConfigurationException e)
-		{
-		e.printStackTrace();
-	} catch (SAXException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-
-		return null;
-}
+        return null;
+    }
 }
