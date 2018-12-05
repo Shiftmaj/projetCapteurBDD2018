@@ -6,9 +6,9 @@ import atexit # Present de base dans Python 3
 
 ### VARIABLES ###
 # Informations de login a la base de donnees
-adresseServeur = "54.39.144.87"
+adresseServeur = "54.37.152.134"
 utilisateur = "postgres"
-motDePasse = "9182"
+motDePasse = "PG@546582"
 baseDeDonnees = "capture"
 
 # Informations Arduino
