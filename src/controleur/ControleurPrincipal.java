@@ -2,8 +2,8 @@ package controleur;
 
 import donnees.ParametreDAO;
 import donnees.TemperatureDAO;
-import model.Parametre;
-import model.Temperature;
+import modele.Parametre;
+import modele.Temperature;
 
 public class ControleurPrincipal {
 
@@ -11,7 +11,8 @@ public class ControleurPrincipal {
 
     /** Point d'accès pour l'instance unique du singleton */
     public static ControleurPrincipal getInstance()
-    {   return INSTANCE;
+    {
+        return INSTANCE;
     }
 
     public Parametre rechercherParametre(){
@@ -21,16 +22,15 @@ public class ControleurPrincipal {
         return  parametre;
     }
 
-    public Temperature rechercherTemperature(){
+    public Temperature rechercherTemperature() {
         TemperatureDAO temperatureDAO = new TemperatureDAO();
         Temperature temperature = temperatureDAO.rechercherTemperature();
         return  temperature;
     }
 
-    public void modifierParametre(int heure, int element, double superieur, double inferieur, boolean boolHeure){
+    public void modifierParametre(int heures, int element, float superieur, float inferieur, boolean boolHeure) {
         ParametreDAO parametreDAO = new ParametreDAO();
-
-        parametreDAO.modifierParametre(heure, element, superieur, inferieur, boolHeure);
+        parametreDAO.modifierParametre(heures, element, superieur, inferieur, boolHeure);
     }
 
 }

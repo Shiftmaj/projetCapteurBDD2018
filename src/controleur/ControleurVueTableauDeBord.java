@@ -1,16 +1,16 @@
 package controleur;
 
-import donnees.ParametreDAO;
 import donnees.TemperatureDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import model.Parametre;
-import model.Temperature;
+import modele.Parametre;
+import modele.Temperature;
 
 public class ControleurVueTableauDeBord {
-    protected TemperatureDAO temperatureDAO;
+
+    private TemperatureDAO temperatureDAO;
     private ControleurPrincipal controleurPrincipal = ControleurPrincipal.getInstance();
 
     public ControleurVueTableauDeBord() {
@@ -18,7 +18,6 @@ public class ControleurVueTableauDeBord {
     }
 
     public void initialize() {
-
         Parametre parametre = controleurPrincipal.rechercherParametre();
 
         superieurA.setText("" + parametre.getSuperieurA());
@@ -77,16 +76,16 @@ public class ControleurVueTableauDeBord {
     private void modifier() {
 
         try {
-            int heure = Integer.parseInt(nbHeure.getText());
+            int heures = Integer.parseInt(nbHeure.getText());
             int element = Integer.parseInt(nbElement.getText());
-            double superieur = Double.parseDouble(superieurA.getText());
-            double inferieur = Double.parseDouble(inferieurA.getText());
+            float superieur = Float.parseFloat(superieurA.getText());
+            float inferieur = Float.parseFloat(inferieurA.getText());
             initChoixSelect();
 
-            controleurPrincipal.modifierParametre(heure, element, superieur,inferieur,boolHeure);
+            controleurPrincipal.modifierParametre(heures, element, superieur,inferieur,boolHeure);
 
             if (boolHeure) {
-                derniereHeure.setText("" + heure);
+                derniereHeure.setText("" + heures);
                 dernierElement.setText("XXX");
             } else {
                 derniereHeure.setText("XXX");
@@ -111,11 +110,11 @@ public class ControleurVueTableauDeBord {
 
         Temperature temperature = controleurPrincipal.rechercherTemperature();
 
-        moyenne.setText((temperature.getMoyenne() != 999999) ? "" + temperature.getMoyenne() : "Valeur erronée");
-        mode.setText((temperature.getMode() != 999999) ? "" + temperature.getMode() : "Valeur erronée");
-        min.setText((temperature.getMinimum() != 999999) ? "" + temperature.getMinimum() : "Valeur erronée");
-        max.setText((temperature.getMaximum() != 999999) ? "" + temperature.getMaximum() : "Valeur erronée");
-        mediane.setText((temperature.getMediane() != 999999) ? "" + temperature.getMediane() : "Valeur erronée");
+        moyenne.setText((temperature.getMoyenne() != 999999) ? "" + temperature.getMoyenne() : "Valeur erronï¿½e");
+        mode.setText((temperature.getMode() != 999999) ? "" + temperature.getMode() : "Valeur erronï¿½e");
+        min.setText((temperature.getMinimum() != 999999) ? "" + temperature.getMinimum() : "Valeur erronï¿½e");
+        max.setText((temperature.getMaximum() != 999999) ? "" + temperature.getMaximum() : "Valeur erronï¿½e");
+        mediane.setText((temperature.getMediane() != 999999) ? "" + temperature.getMediane() : "Valeur erronï¿½e");
     }
 
     private void initChoixSelect() {
