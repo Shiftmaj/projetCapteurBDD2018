@@ -1,18 +1,15 @@
-var postgresql = require('pg');
-var chaineDeConnexion = 'postgres://postgres:9182@54.39.144.87:5432/capture';
+const postgresql = require('pg');
+const identifiants = require('./identifiants.js');
 
-const SQL_LISTE_TEMPERATURE = 'SELECT * FROM brute;';
-const SQL_MOYENNE_TEMPERATURE = 'SELECT * FROM vue ORDER BY ID DESC LIMIT 1;';
-const SQL_MEDIANE_TEMPERATURE = 'SELECT * FROM brute ORDER BY temperature OFFSET ((SELECT count(*) FROM brute) / 2) LIMIT 1;';
-const SQL_MINIMUM_TEMPERATURE = 'SELECT * FROM brute WHERE temperature = (SELECT MIN(temperature) FROM brute);';
-const SQL_MAXIMUM_TEMPERATURE = 'SELECT * FROM brute WHERE temperature = (SELECT MAX(temperature) FROM brute);';
-const SQL_MODE_TEMPERATURE = "SELECT COUNT(*) as compte, temperature FROM brute GROUP BY brute.temperature ORDER BY compte DESC LIMIT 1;";
-/*const SQL_DONNER_ETUDIANT = 'SELECT * FROM etudiant WHERE id=$1;';
-const SQL_AJOUTER_ETUDIANT = 'INSERT INTO etudiant VALUES(DEFAULT, $1, $2, $3, $4, $5);';
-const SQL_SUPPRIMER_ETUDIANT = 'DELETE FROM etudiant WHERE id=$1;'
-const SQL_MODIFIER_ETUDIANT = 'UPDATE etudiant SET nom = $1 , prenom = $2, age = $3, id_nationalite = $4, id_universite = $5 WHERE id = $6;';*/
+var chaineDeConnexion = 'postgres://' + identifiants.identifiant + ':' + identifiants.motDePasse
+    +'@' + identifiants.ip + ':' + identifiants.port + '/' + identifiants.baseDeDonnees;
 
-
+const SQL_LISTE_TEMPERATURE = 'SELECT * FROM brute_archivage LIMIT 200;';
+const SQL_MOYENNE_TEMPERATURE = 'SELECT moyenne_temperature, timestamp FROM vue ORDER BY ID DESC LIMIT 1;';
+const SQL_MEDIANE_TEMPERATURE = 'SELECT * FROM brute_archivage ORDER BY temperature OFFSET ((SELECT count(*) FROM brute_archivage) / 2) LIMIT 1;';
+const SQL_MINIMUM_TEMPERATURE = 'SELECT * FROM brute_archivage WHERE temperature = (SELECT MIN(temperature) FROM brute_archivage);';
+const SQL_MAXIMUM_TEMPERATURE = 'SELECT * FROM brute_archivage WHERE temperature = (SELECT MAX(temperature) FROM brute_archivage);';
+const SQL_MODE_TEMPERATURE = "SELECT COUNT(*) as compte, temperature FROM brute_archivage GROUP BY brute_archivage.temperature ORDER BY compte DESC LIMIT 1;";
 
 exports.listerTemperatures = async function listerTemperatures() {
     const basededonnees = new postgresql.Client(chaineDeConnexion);
@@ -63,6 +60,7 @@ exports.maximumTemperature = async function maximumTemperature(){
 
     return maxTemp.rows;
 };
+
 exports.modeTemperature = async function modeTemperature(){
     const basededonnees = new postgresql.Client(chaineDeConnexion);
 
@@ -73,5 +71,3 @@ exports.modeTemperature = async function modeTemperature(){
     return modTemp.rows;
 
 };
-
-
