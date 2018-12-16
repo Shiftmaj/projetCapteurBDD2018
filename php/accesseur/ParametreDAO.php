@@ -5,13 +5,21 @@ include_once "connexion.php";
 class ParametreDAO
 {
 
+    function listerParametresMongo() {
+        global $manager;
+
+        $commande = new MongoDB\Driver\Command(array('find' => 'parametres'));
+        $curseur = $manager->executeCommand('capture', $commande);
+
+        return($curseur->toArray());
+    }
+
     function listerParametres(){
         global $basededonnees;
         $SQL_LISTER_PARAMETRES = "SELECT * FROM public.parametres LIMIT 1;";
         $requeteListeParametres = $basededonnees->prepare($SQL_LISTER_PARAMETRES);
 		$requeteListeParametres->execute();
 		return $requeteListeParametres->fetchAll(PDO::FETCH_OBJ);
-
     }
 
     function modifierParametres($parametres){
