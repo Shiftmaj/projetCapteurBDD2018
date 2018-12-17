@@ -12,7 +12,6 @@ class StatistiqueDAO
         $requeteListeStatistiques = $basededonnees->prepare($SQL_LISTER_STATISTIQUES);
 		$requeteListeStatistiques->execute();
 		return $requeteListeStatistiques->fetchAll(PDO::FETCH_OBJ);
-
     }
 
     function lireTemperatureMinimum()
