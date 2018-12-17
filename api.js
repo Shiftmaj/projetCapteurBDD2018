@@ -6,10 +6,11 @@ var serveur = http.createServer(
     {
         if(requete.method === 'GET')
         {
-            if(requete.url === '/temperature' || requete.url === '/temperature/')
+            if(requete.url === '/temperature/liste' || requete.url === '/temperature/liste/')
             {
                 const temperature = await temperatureDAO.listerTemperatures();
                 reponse.end(JSON.stringify(temperature));
+                // JSON.stringify() OWASP DOM based XSS Prevention Cheat Sheet GUIDELINE #10 + https://stackoverflow.com/questions/17785592/difference-between-json-stringify-and-json-parse
             }
             else if(requete.url === '/temperature/moyenne' || requete.url === '/temperature/moyenne/')
             {
